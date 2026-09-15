@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diagnóstico de Madurez BIM (BIm³) | Autoevaluación Metodológica v1.22</title>
+
+  <!-- Google Fonts: Roboto Condensed -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+
+  <!-- Estilos Institucionales -->
+  <link rel="stylesheet" href="styles.css">
+
+  <!-- Librerías Externas para Visualización y Exportación PDF -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+
+  <div class="app-wrapper">
+
+    <!-- Header Superior Institucional -->
+    <header class="app-header">
+      <div class="header-left">
+        <div class="brand-badge">BIm³</div>
+        <div class="header-titles">
+          <h1 class="app-title-main">Diagnóstico de Madurez BIM Organizacional</h1>
+          <div class="subtitle">BIMe Initiative / BIM Excellence • Matriz de Madurez v1.22 (trad. Víctor Roig)</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <div class="session-badge" id="session-status-badge">
+          <span class="session-dot"></span>
+          <span id="session-badge-text">Taller en Curso</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Barra de Progreso y Stepper de Categorías -->
+    <nav class="stepper-container" aria-label="Navegación del Taller">
+      <div class="stepper-nav" id="stepper-nav">
+        <button class="step-btn active" data-step="0" id="step-btn-0">
+          <span class="step-num">0</span>
+          <span class="step-label">Configuración</span>
+          <span class="step-badge">Datos taller</span>
+        </button>
+        <button class="step-btn" data-step="1" id="step-btn-1">
+          <span class="step-num">1</span>
+          <span class="step-label">Tecnología</span>
+          <span class="step-badge" id="step-badge-1">0/3 áreas</span>
+        </button>
+        <button class="step-btn" data-step="2" id="step-btn-2">
+          <span class="step-num">2</span>
+          <span class="step-label">Proceso</span>
+          <span class="step-badge" id="step-badge-2">0/4 áreas</span>
+        </button>
+        <button class="step-btn" data-step="3" id="step-btn-3">
+          <span class="step-num">3</span>
+          <span class="step-label">Política</span>
+          <span class="step-badge" id="step-badge-3">0/3 áreas</span>
+        </button>
+        <button class="step-btn" data-step="4" id="step-btn-4">
+          <span class="step-num">4</span>
+          <span class="step-label">Etapas BIM</span>
+          <span class="step-badge" id="step-badge-4">0/3 áreas</span>
+        </button>
+        <button class="step-btn" data-step="5" id="step-btn-5">
+          <span class="step-num">5</span>
+          <span class="step-label">Escala Org.</span>
+          <span class="step-badge" id="step-badge-5">0/2 áreas</span>
+        </button>
+        <button class="step-btn" data-step="6" id="step-btn-6">
+          <span class="step-num">6</span>
+          <span class="step-label">Diagnóstico</span>
+          <span class="step-badge">Resultados</span>
+        </button>
+      </div>
+
+      <div class="progress-container">
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="global-progress-bar"></div>
+        </div>
+        <div class="progress-text" id="global-progress-text">0 de 15 áreas completadas (0%)</div>
+      </div>
+    </nav>
+
+    <!-- ===================================================================
+         PANTALLA 0: CONFIGURACIÓN INICIAL DEL TALLER
+         =================================================================== -->
+    <section class="screen-panel active" id="screen-0">
+      <div class="section-header">
+        <span class="section-category-tag">Módulo 1</span>
+        <h2>Configuración Inicial del Taller de Autoevaluación</h2>
+        <p>Define los datos de la sesión de trabajo recomendada (3 a 8 participantes, 60-90 minutos) y datos de contacto para contextualizar el diagnóstico y el reporte oficial.</p>
+      </div>
+
+      <div class="info-callout methodology">
+        <strong>Pautas metodológicas para el facilitador:</strong> Para cada área de capacidad, leer la fila completa (niveles a, b, c, d, e) antes de consensuar con el equipo la celda que mejor describe el estado actual de la organización.
+      </div>
+
+      <form id="config-form" onsubmit="event.preventDefault();">
+        <div class="form-grid">
+          <div class="form-group" id="group-org-name">
+            <label class="form-label" for="org-name">Nombre de la Organización / Empresa <span class="required">*</span></label>
+            <input type="text" id="org-name" class="form-input" placeholder="Ej: Constructora & Consultoría BIM S.A.S." required autocomplete="off">
+            <span class="input-hint" id="hint-org-name">Campo obligatorio</span>
+          </div>
+
+          <div class="form-group" id="group-facilitator-name">
+            <label class="form-label" for="facilitator-name">Nombre del Facilitador / Líder de Evaluación <span class="required">*</span></label>
+            <input type="text" id="facilitator-name" class="form-input" placeholder="Ej: Julian López" required autocomplete="off">
+            <span class="input-hint" id="hint-facilitator-name">Campo obligatorio</span>
+          </div>
+
+          <div class="form-group" id="group-session-date">
+            <label class="form-label" for="session-date">Fecha de la Sesión <span class="required">*</span></label>
+            <input type="date" id="session-date" class="form-input" required>
+            <span class="input-hint" id="hint-session-date">Campo obligatorio</span>
+          </div>
+
+          <div class="form-group" id="group-contact-phone">
+            <label class="form-label" for="contact-phone">Teléfono de Contacto <span class="required">*</span></label>
+            <div class="phone-input-group">
+              <select id="phone-country-code" class="form-select phone-code-select" aria-label="Indicativo de país">
+                <option value="+57" selected>🇨🇴 +57 (Colombia)</option>
+                <option value="+52">🇲🇽 +52 (México)</option>
+                <option value="+34">🇪🇸 +34 (España)</option>
+                <option value="+56">🇨🇱 +56 (Chile)</option>
+                <option value="+54">🇦🇷 +54 (Argentina)</option>
+                <option value="+51">🇵🇪 +51 (Perú)</option>
+                <option value="+507">🇵🇦 +507 (Panamá)</option>
+                <option value="+506">🇨🇷 +506 (Costa Rica)</option>
+                <option value="+593">🇪🇨 +593 (Ecuador)</option>
+                <option value="+598">🇺🇾 +598 (Uruguay)</option>
+                <option value="+591">🇧🇴 +591 (Bolivia)</option>
+                <option value="+502">🇬🇹 +502 (Guatemala)</option>
+                <option value="+503">🇸🇻 +503 (El Salvador)</option>
+                <option value="+504">🇭🇳 +504 (Honduras)</option>
+                <option value="+505">🇳🇮 +505 (Nicaragua)</option>
+                <option value="+595">🇵🇾 +595 (Paraguay)</option>
+                <option value="+1">🇺🇸/🇨🇦 +1 (USA / Canadá)</option>
+                <option value="+1-809">🇩🇴 +1-809 (Rep. Dominicana)</option>
+              </select>
+              <input type="tel" id="contact-phone" class="form-input" placeholder="Ej: 310 123 4567" required autocomplete="off">
+            </div>
+            <span class="input-hint" id="hint-contact-phone">Campo obligatorio</span>
+          </div>
+
+          <div class="form-group" id="group-contact-email">
+            <label class="form-label" for="contact-email">Correo Electrónico de Contacto <span class="required">*</span></label>
+            <input type="email" id="contact-email" class="form-input" placeholder="Ej: evaluacion.bim@empresa.com" required autocomplete="off">
+            <span class="input-hint" id="hint-contact-email">Campo obligatorio con formato válido</span>
+          </div>
+
+          <div class="form-group" id="group-participants-list">
+            <label class="form-label" for="participants-list">Participantes del Taller (Nombres y Roles) <span class="required">*</span></label>
+            <input type="text" id="participants-list" class="form-input" placeholder="Ej: María R. (Coord. BIM), Carlos M. (Dir. Proyectos), Andrés T. (Modelador)" required autocomplete="off">
+            <span class="input-hint" id="hint-participants-list">Campo obligatorio</span>
+          </div>
+
+          <div class="form-group full-width">
+            <div class="toggle-card">
+              <label class="toggle-switch">
+                <input type="checkbox" id="include-macro-toggle">
+                <span class="slider"></span>
+              </label>
+              <div>
+                <strong style="color: var(--text-main); font-size: 0.95rem; display: block;">Incluir Área Macro (Mercados & Dinámicas de Proveedores)</strong>
+                <span style="color: var(--text-muted); font-size: 0.82rem;">
+                  Nota metodológica BIMe: <em>"Aplicar este asunto sólo si es asistido por un asesor formado"</em>. Si se desactiva, la autoevaluación considerará 15 áreas en lugar de 16.
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="nav-actions-bar">
+          <div id="config-status-feedback" class="config-feedback-box">
+            <span id="config-feedback-icon">⚠️</span>
+            <span id="config-feedback-msg">Diligencia todos los campos obligatorios (*) para habilitar el inicio de la evaluación.</span>
+          </div>
+          <button type="button" class="btn btn-primary" id="btn-start-evaluation" disabled>
+            Comenzar Evaluación (Categoría 1: Tecnología) &rarr;
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- ===================================================================
+         PANTALLAS 1 A 5: CATEGORÍAS DEL CUESTIONARIO (Generadas dinámicamente)
+         =================================================================== -->
+    <section class="screen-panel" id="screen-1">
+      <div class="section-header">
+        <span class="section-category-tag" id="cat-tag-1">Categoría 1</span>
+        <h2 id="cat-title-1">Tecnología</h2>
+        <p id="cat-desc-1">Infraestructura tecnológica, soluciones de software, hardware y conectividad de red.</p>
+      </div>
+      <div id="areas-container-1"></div>
+      <div class="nav-actions-bar">
+        <button type="button" class="btn btn-secondary" onclick="BIMApp.navigateToStep(0)">&larr; Configuración</button>
+        <button type="button" class="btn btn-primary" onclick="BIMApp.navigateToStep(2)">Siguiente: Proceso &rarr;</button>
+      </div>
+    </section>
+
+    <section class="screen-panel" id="screen-2">
+      <div class="section-header">
+        <span class="section-category-tag" id="cat-tag-2">Categoría 2</span>
+        <h2 id="cat-title-2">Proceso</h2>
+        <p id="cat-desc-2">Dinámicas operativas, roles, infraestructura de conocimiento, especificación de entregables y liderazgo.</p>
+      </div>
+      <div id="areas-container-2"></div>
+      <div class="nav-actions-bar">
+        <button type="button" class="btn btn-secondary" onclick="BIMApp.navigateToStep(1)">&larr; Tecnología</button>
+        <button type="button" class="btn btn-primary" onclick="BIMApp.navigateToStep(3)">Siguiente: Política &rarr;</button>
+      </div>
+    </section>
+
+    <section class="screen-panel" id="screen-3">
+      <div class="section-header">
+        <span class="section-category-tag" id="cat-tag-3">Categoría 3</span>
+        <h2 id="cat-title-3">Política</h2>
+        <p id="cat-desc-3">Directrices de formación, marcos regulatorios, normativas, estándares de calidad y contratos.</p>
+      </div>
+      <div id="areas-container-3"></div>
+      <div class="nav-actions-bar">
+        <button type="button" class="btn btn-secondary" onclick="BIMApp.navigateToStep(2)">&larr; Proceso</button>
+        <button type="button" class="btn btn-primary" onclick="BIMApp.navigateToStep(4)">Siguiente: Etapas BIM &rarr;</button>
+      </div>
+    </section>
+
+    <section class="screen-panel" id="screen-4">
+      <div class="section-header">
+        <span class="section-category-tag" id="cat-tag-4">Categoría 4</span>
+        <h2 id="cat-title-4">Etapas BIM</h2>
+        <p id="cat-desc-4">Evolución de la madurez a través de las 3 etapas clave: Modelado individual, Colaboración y Red Integrada.</p>
+      </div>
+      <div id="areas-container-4"></div>
+      <div class="nav-actions-bar">
+        <button type="button" class="btn btn-secondary" onclick="BIMApp.navigateToStep(3)">&larr; Política</button>
+        <button type="button" class="btn btn-primary" onclick="BIMApp.navigateToStep(5)">Siguiente: Escala Organizacional &rarr;</button>
+      </div>
+    </section>
+
+    <section class="screen-panel" id="screen-5">
+      <div class="section-header">
+        <span class="section-category-tag" id="cat-tag-5">Categoría 5</span>
+        <h2 id="cat-title-5">Escala Organizacional</h2>
+        <p id="cat-desc-5">Alcance organizacional de la adopción BIM: dinámicas Micro (empresa), Meso (equipos de proyecto) y Macro (mercados).</p>
+      </div>
+      <div id="areas-container-5"></div>
+      <div class="nav-actions-bar">
+        <button type="button" class="btn btn-secondary" onclick="BIMApp.navigateToStep(4)">&larr; Etapas BIM</button>
+        <button type="button" class="btn btn-success" onclick="BIMApp.navigateToStep(6)">Ver Diagnóstico & Resultados &rarr;</button>
+      </div>
+    </section>
+
+    <!-- ===================================================================
+         PANTALLA 6: DIAGNÓSTICO & INFORME FINAL DE RESULTADOS
+         =================================================================== -->
+    <section class="screen-panel" id="screen-6">
+      <div class="section-header">
+        <span class="section-category-tag">Módulo 4</span>
+        <h2>Diagnóstico de Madurez BIM y Resultados del Taller</h2>
+        <p>Síntesis gráfica, desglose por áreas de capacidad y recomendaciones orientativas para la hoja de ruta.</p>
+      </div>
+
+      <!-- Resumen de Métricas Clave -->
+      <div class="metrics-row">
+        <div class="metric-pill-card">
+          <div class="metric-label">Lectura Global Orientativa</div>
+          <div class="metric-value" id="res-metric-level">Nivel —</div>
+          <div class="metric-sub" id="res-metric-points">Promedio: 0.0 / 40 pts</div>
+        </div>
+        <div class="metric-pill-card">
+          <div class="metric-label">Categoría Más Fuerte</div>
+          <div class="metric-value" style="font-size: 1.35rem; color: #34D399;" id="res-metric-strongest">—</div>
+          <div class="metric-sub" id="res-metric-strongest-val">Puntaje destacado</div>
+        </div>
+        <div class="metric-pill-card">
+          <div class="metric-label">Categoría Más Débil (Brecha)</div>
+          <div class="metric-value" style="font-size: 1.35rem; color: #F87171;" id="res-metric-weakest">—</div>
+          <div class="metric-sub" id="res-metric-weakest-val">Prioridad de mejora</div>
+        </div>
+      </div>
+
+      <!-- Resumen Ejecutivo y Gráfico Radar -->
+      <div class="summary-grid">
+        <div class="summary-card-box">
+          <h3 style="font-size: 1.1rem; margin-bottom: 12px; color: var(--text-main);">Resumen Ejecutivo</h3>
+          <p id="res-exec-summary" style="font-size: 0.92rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 16px;">
+            El diagnóstico se actualizará automáticamente a medida que completes las respuestas en el cuestionario.
+          </p>
+
+          <div class="info-callout warning" style="margin-bottom: 0;">
+            <strong>Descargo Metodológico Obligatorio (BIm³):</strong>
+            <span id="res-disclaimer-text"></span>
+          </div>
+        </div>
+
+        <div class="summary-card-box">
+          <h3 style="font-size: 1.1rem; margin-bottom: 8px; color: var(--text-main); text-align: center;">Gráfico de Radar por Categorías (Spider Chart)</h3>
+          <div class="radar-chart-container">
+            <canvas id="radarChartCanvas"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla Detallada de Áreas Evaluadas -->
+      <div class="summary-card-box" style="margin-bottom: 24px;">
+        <h3 style="font-size: 1.15rem; margin-bottom: 14px; color: var(--text-main);">Desglose Detallado de las 16 Áreas de Capacidad</h3>
+        <div class="results-table-container">
+          <table class="results-table">
+            <thead>
+              <tr>
+                <th style="width: 10%;">Código</th>
+                <th style="width: 25%;">Área de Capacidad</th>
+                <th style="width: 15%;">Categoría</th>
+                <th style="width: 20%;">Nivel Seleccionado</th>
+                <th style="width: 10%;">Puntaje</th>
+                <th style="width: 20%;">Notas del Facilitador</th>
+              </tr>
+            </thead>
+            <tbody id="results-table-body">
+              <!-- Filas generadas por JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Recomendaciones Orientativas Dinámicas -->
+      <div class="summary-card-box" style="margin-bottom: 24px;">
+        <h3 style="font-size: 1.15rem; margin-bottom: 8px; color: var(--text-main);">Recomendaciones Orientativas para la Hoja de Ruta</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 16px;">
+          Sugerencias tácticas generadas automáticamente según los patrones y brechas identificadas en el diagnóstico:
+        </p>
+        <div class="recommendations-list" id="recommendations-container">
+          <!-- Recomendaciones generadas dinámicamente -->
+        </div>
+      </div>
+
+      <!-- Recordatorio de Periodicidad y Atribución -->
+      <div class="info-callout methodology" style="margin-bottom: 24px;">
+        <strong>Periodicidad del diagnóstico:</strong> Se recomienda repetir la autoevaluación cada 6-12 meses para medir el impacto de las iniciativas y actualizar la hoja de ruta BIM.
+      </div>
+
+      <!-- Barra de Acciones del Diagnóstico -->
+      <div class="nav-actions-bar">
+        <button type="button" class="btn btn-secondary" onclick="BIMApp.navigateToStep(5)">&larr; Revisar Respuestas</button>
+        <div style="display: flex; gap: 12px;">
+          <button type="button" class="btn btn-danger" onclick="BIMApp.resetWorkshop()">🔄 Nuevo Taller</button>
+          <button type="button" class="btn btn-success" id="btn-export-pdf" style="font-size: 1.05rem; padding: 12px 24px;">
+            📥 Generar y Descargar Informe PDF
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pie de Página Institucional con Firma de Autoridad -->
+    <footer class="app-footer">
+      <div class="footer-content">
+        <div class="footer-signature">
+          Julian López | Arquitecto • Especialista BIM - BIM Management - 2026
+        </div>
+        <div class="footer-credits">
+          Metodología BIm³ v1.22: Dr. Bilal Succar / BIMe Initiative • Licencia CC BY-NC-SA 3.0 • Trad. Víctor Roig
+        </div>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Scripts de la Aplicación -->
+  <script src="matrixData.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
